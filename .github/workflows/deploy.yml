@@ -1,0 +1,24 @@
+name: Deploy to GitHub Pages
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+      - run: flutter build web --release
+      - name: Copy to docs
+        run: rsync -av build/web/ docs/
+      - name: Commit & Push docs
+        run: |
+          git config user.name github-actions
+          git config user.email actions@github.com
+          git add docs
+          git commit -m "📦 auto deploy"
+          git push

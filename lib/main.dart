@@ -70,13 +70,14 @@ class _InvitationPageState extends State<InvitationPage>
             opacity: _fadeAnim,
             child: Container(
               width: 350,
+              height: 500, 
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24),
-                // image: const DecorationImage(
-                //   image: AssetImage('assets/renzo_invite.png'),
-                //   fit: BoxFit.cover,
-                // ),
+                image: const DecorationImage(
+                  image: AssetImage('assets/renzo_invite.png'),
+                  fit: BoxFit.fill,
+                ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.15),
@@ -85,7 +86,9 @@ class _InvitationPageState extends State<InvitationPage>
                   ),
                 ],
               ),
-              child: Column(
+              child: 
+              
+              Visibility(visible : false, child : Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(height: 220), // push text below the baby-flower
@@ -133,7 +136,7 @@ class _InvitationPageState extends State<InvitationPage>
                     ),
                   ),
                 ],
-              ),
+              ),),
             ),
           ),
         ),
