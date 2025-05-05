@@ -3,6 +3,12 @@ on:
   push:
     branches: [ main ]
 
+permissions:
+  contents: write     # allow pushing commits
+  pages: write        # if you’re using the new Pages actions
+  id-token: write     # only needed if you call oidc
+
+
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest

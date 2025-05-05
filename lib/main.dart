@@ -116,7 +116,7 @@ class InvitationPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   const Text(
-                    'Daniel',
+                    'Renzo',
                     style: TextStyle(
                       fontSize: 32,
                       fontFamily: 'Pacifico',
@@ -133,20 +133,11 @@ class InvitationPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'At 123 Anywhere St., Any City',
+                    'At St.Archangel Parish Church \nPoblacion Norte, Clarin, Bohol',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14,
                       color: Color(0xFF546E7A),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    'RSVP: +123-456-7890',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF1565C0),
                     ),
                   ),
                 ],
