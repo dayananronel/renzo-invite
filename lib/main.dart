@@ -74,10 +74,6 @@ class _InvitationPageState extends State<InvitationPage>
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24),
-                image: const DecorationImage(
-                  image: AssetImage('assets/renzo_invite.png'),
-                  fit: BoxFit.fill,
-                ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.15),
