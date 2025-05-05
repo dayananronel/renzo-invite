@@ -4,10 +4,9 @@ on:
     branches: [ main ]
 
 permissions:
-  contents: write     # allow pushing commits
-  pages: write        # if you’re using the new Pages actions
-  id-token: write     # only needed if you call oidc
-
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   build-and-publish:
@@ -18,7 +17,7 @@ jobs:
         with:
           channel: stable
       - run: flutter pub get
-      - run: flutter build web --release
+      - run: flutter build web --release --base-href /renzo-invite/
       - name: Copy to docs
         run: rsync -av build/web/ docs/
       - name: Commit & Push docs
