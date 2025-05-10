@@ -129,6 +129,30 @@ void showThankYouDialog(BuildContext context) {
   );
 }
 
+ConfettiController? _confettiController;
+
+@override
+void initState() {
+  super.initState();
+  _confettiController = ConfettiController(duration: Duration(seconds: 3));
+}
+
+@override
+void dispose() {
+  _confettiController?.dispose();
+  super.dispose();
+}
+
+Widget _scrollablePage(Widget child) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child : Center(child : child),
+        );
+      },
+    );
+  }
 
 @override
 Widget build(BuildContext context) {
@@ -137,17 +161,36 @@ Widget build(BuildContext context) {
       children: [
         PageView(
           controller: _controller,
-          onPageChanged: (index) => setState(() => _pageIndex = index),
+          physics: NeverScrollableScrollPhysics(),
+          onPageChanged: (index) {
+            setState(() => _pageIndex = index);
+            if (index == 5) _confettiController?.play(); // Trigger confetti on "Thank You" page
+          },
           children: [
-            _buildPage('Baptism of Renzo', icon: Icons.child_care),
-            _buildImagePage('assets/images/renzo_edited.png', 'We’d really love to have you join us for this special moment.'),
-            _buildGodparentPage(), // This is AskPermission
-            _buildDatePage(),
-            _buildLocationPage(),
-            _buildPage('Thank you for joining us!\nYour presence is a gift.', icon: Icons.favorite),
+            _scrollablePage(_buildPage('Baptism of Renzo', icon: Icons.child_care)),
+            _scrollablePage(_buildImagePage('assets/images/renzo_edited.png', 'We’d really love to have you join us for this special moment.')),
+            _scrollablePage(_buildGodparentPage()),
+            _scrollablePage(_buildDatePage()),
+            _scrollablePage(_buildLocationPage()),
+            _scrollablePage(_buildPage('Thank you!\nYour presence is a gift. SEE YAHHH!', icon: Icons.favorite)),
           ],
         ),
-        if (_pageIndex != 2) // index 2 is AskPermission
+
+        // 🎉 GLOBAL CONFETTI OVERLAY
+        Align(
+          alignment: Alignment.topCenter,
+          child: ConfettiWidget(
+            confettiController: _confettiController!,
+            blastDirectionality: BlastDirectionality.explosive,
+            shouldLoop: false,
+            colors: [Colors.blue, Colors.white, Colors.lightBlueAccent],
+            emissionFrequency: 0.05,
+            numberOfParticles: 30,
+            gravity: 0.1,
+          ),
+        ),
+
+        if (!(_pageIndex == 2 || _pageIndex == 5))
           Positioned(
             bottom: 40,
             left: 0,
@@ -164,24 +207,44 @@ Widget build(BuildContext context) {
     ),
   );
 }
+Widget _buildPage(String text, {required IconData icon}) {
+  final showConfetti = text.toLowerCase().contains('thank you');
+  final confettiController = ConfettiController(duration: Duration(seconds: 3));
 
-  Widget _buildPage(String text, {required IconData icon}) {
-    return Center(
-      child: Container(
-        margin: EdgeInsets.all(24),
-        padding: EdgeInsets.all(24),
-        decoration: _decoratedBox(),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 64, color: kAccentBlue),
-            SizedBox(height: 24),
-            Text(text, style: Theme.of(context).textTheme.headlineMedium, textAlign: TextAlign.center),
-          ],
+  if (showConfetti) confettiController.play();
+
+  return Center(
+    child: Stack(
+      alignment: Alignment.topCenter,
+      children: [
+        Container(
+          margin: EdgeInsets.all(24),
+          padding: EdgeInsets.all(24),
+          decoration: _decoratedBox(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 64, color: kAccentBlue),
+              SizedBox(height: 24),
+              Text(text, style: Theme.of(context).textTheme.headlineMedium, textAlign: TextAlign.center),
+            ],
+          ),
         ),
-      ),
-    );
-  }
+        if (showConfetti)
+          ConfettiWidget(
+            confettiController: confettiController,
+            blastDirectionality: BlastDirectionality.explosive,
+            shouldLoop: false,
+            colors: [Colors.blue, Colors.white, Colors.lightBlueAccent],
+            emissionFrequency: 0.05,
+            numberOfParticles: 30,
+            gravity: 0.1,
+          ),
+      ],
+    ),
+  );
+}
+
 
   Widget _buildImagePage(String imagePath, String caption) {
     return Center(
